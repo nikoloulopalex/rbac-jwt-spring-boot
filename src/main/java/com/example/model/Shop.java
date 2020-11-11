@@ -28,7 +28,6 @@ public class Shop {
      
     private String maxProducts;
     
-    @JsonBackReference
     @OneToMany(mappedBy = "shop")
     private Set<Product> products = new HashSet<>();
     

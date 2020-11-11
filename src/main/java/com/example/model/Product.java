@@ -1,11 +1,14 @@
 package com.example.model;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.OnDelete;
@@ -31,7 +34,18 @@ public class Product {
     
     private String description;
     
-    @JsonManagedReference
+    @Lob
+    @Column(name = "Image", length = Integer.MAX_VALUE, nullable = true)
+    private String image;
+    
+    public Long getSalesPrice() {
+		return salesPrice;
+	}
+
+	public void setSalesPrice(Long salesPrice) {
+		this.salesPrice = salesPrice;
+	}
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -61,13 +75,6 @@ public class Product {
         this.price = price;
     }
  
-    public Long getsalesPrice() {
-        return salesPrice;
-    }
- 
-    public void setsalesPrice(Long salesPrice) {
-        this.salesPrice = salesPrice;
-    }
 
 	public String getDescription() {
 		return description;
@@ -84,5 +91,13 @@ public class Product {
     public void setShop(Shop shop) {
         this.shop = shop;
     }
+
+    public String getImage() {
+		return image;
+	}
+
+	public void setImage(String fileName) {
+		this.image = fileName;
+	}
 
 }

@@ -14,7 +14,7 @@ import com.example.model.Shop;
 import com.example.repository.ShopRepository;
 
 @RestController
-@RequestMapping("/shops")
+@RequestMapping("api/shops")
 public class ShopController {
 
 	private final ShopRepository repository;
