@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.roles.exceptions.ResourceNotFoundException;
-import com.roles.exceptions.StudentNotFoundException;
-import com.roles.model.Student;
 import com.roles.model.User;
 import com.roles.repository.UserRepository;
 
@@ -41,23 +39,25 @@ public class UserController {
 	    return repository.findById(id).orElseThrow(ResourceNotFoundException::new);
 	} 
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public User addUser(@RequestBody User user) {
 	    return repository.save(user);
 	} 
 	
-//	@PutMapping("{id}")
-//	public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
-//	    Student studentToUpdate = repository.findById(id).orElseThrow(StudentNotFoundException::new);
-//	 
-//	        studentToUpdate.setFirstName(student.getFirstName());
-//	        studentToUpdate.setLastName(student.getLastName());
-//	        studentToUpdate.setYear(student.getYear());
-//	 
-//	    return repository.save(studentToUpdate);
-//	}   
-//	
+	@PutMapping("{id}")
+	@PreAuthorize("hasRole('ADMIN') || hasRole('MODERATOR')" )
+	public User updateUser(@PathVariable Long id, @RequestBody User user) {
+	    User userToUpdate = repository.findById(id).orElseThrow(ResourceNotFoundException::new);
+	 
+	    userToUpdate.setUsername(user.getUsername());
+	    userToUpdate.setEmail(user.getEmail());
+	    userToUpdate.setPassword(user.getPassword());
+	 
+	    return repository.save(userToUpdate);
+	}   
+	
+	
 	@DeleteMapping("/{id}")
 	public void deleteUser(@PathVariable Long id) {
 	    repository.findById(id).orElseThrow(ResourceNotFoundException::new);

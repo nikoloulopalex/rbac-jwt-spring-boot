@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.roles.exceptions.StudentNotFoundException;
+import com.roles.exceptions.ResourceNotFoundException;
 import com.roles.model.Shop;
 import com.roles.repository.ShopRepository;
 
@@ -24,13 +24,13 @@ public class ShopController {
 	}
 	
 	@GetMapping
-	public Iterable<Shop> getStudents() {
+	public Iterable<Shop> getShops() {
 	    return repository.findAll();
 	}   
 	
 	@GetMapping("{id}")
 	public Shop getShop(@PathVariable int id) {
-	    return repository.findById(id).orElseThrow(StudentNotFoundException::new);
+	    return repository.findById(id).orElseThrow(ResourceNotFoundException::new);
 	} 
 	
 	@PostMapping
@@ -38,20 +38,20 @@ public class ShopController {
 	    return repository.save(shop);
 	} 
 	
-//	@PutMapping("{id}")
-//	public Shop updateStudent(@PathVariable Long id, @RequestBody Shop shop) {
-//	    Student studentToUpdate = repository.findById(id).orElseThrow(StudentNotFoundException::new);
-//	 
-//	        studentToUpdate.setFirstName(shop.getFirstName());
-//	        studentToUpdate.setLastName(shop.getLastName());
-//	        studentToUpdate.setYear(shop.getYear());
-//	 
-//	    return repository.save(studentToUpdate);
-//	}   
+	@PutMapping("{id}")
+	public Shop udateShop(@PathVariable Integer id, @RequestBody Shop shop) {
+	    Shop shopToUpdate = repository.findById(id).orElseThrow(ResourceNotFoundException::new);
+	 
+	    shopToUpdate.setname(shop.getname());
+	    shopToUpdate.setlocation(shop.getlocation());
+	    shopToUpdate.setmaxProducts(shop.getmaxProducts());
+	 
+	    return repository.save(shopToUpdate);
+	}   
 	
 	@DeleteMapping("/{id}")
 	public void deleteShop(@PathVariable int id) {
-	    repository.findById(id).orElseThrow(StudentNotFoundException::new);
+	    repository.findById(id).orElseThrow(ResourceNotFoundException::new);
 	    repository.deleteById(id);
 	}
 	

@@ -12,7 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/api/images/*")
 public class FileServlet extends HttpServlet {
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException
     {

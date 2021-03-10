@@ -1,15 +1,9 @@
 package com.roles.controller;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 
-import java.util.Optional;
-
-import javax.validation.Valid;
-
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.roles.exceptions.ResourceNotFoundException;
-import com.roles.exceptions.StudentNotFoundException;
 import com.roles.model.Product;
-import com.roles.model.Shop;
 import com.roles.repository.ProductRepository;
 import com.roles.repository.ShopRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,11 +32,8 @@ import java.util.List;
 @RequestMapping
 public class ProductController {
 private final ProductRepository repository;
-private final ShopRepository shopRepository;
-	
-	public ProductController(ProductRepository repository, ShopRepository shopRepository) {
+public ProductController(ProductRepository repository, ShopRepository shopRepository) {
 		this.repository = repository;
-		this.shopRepository = shopRepository;
 	}
 	
 	@GetMapping("api/products")
@@ -73,7 +60,7 @@ private final ShopRepository shopRepository;
 	} 
 	
 	@PostMapping("api/products/new")
-	public ResponseEntity addProductNew( @RequestParam("fileImage") MultipartFile multipartFile) {
+	public ResponseEntity<String> addProductNew( @RequestParam("fileImage") MultipartFile multipartFile) {
 		System.out.println(multipartFile);
 		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 		
@@ -95,21 +82,21 @@ private final ShopRepository shopRepository;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
+	    return new ResponseEntity<String>("Successfully uploaded!", HttpStatus.OK);
 	} 
 	
 	
 
 
 	@PutMapping("api/products/{id}")
-	public Product updateProduct(@PathVariable int id, @RequestBody Product Product) {
+	public Product updateProduct(@PathVariable int id, @RequestBody Product product) {
 	    Product productToUpdate = repository.findById(id).orElseThrow(ResourceNotFoundException::new);
 	 
-	    productToUpdate.setName(Product.getName());
-	    productToUpdate.setPrice(Product.getPrice());
-//	    productToUpdate.setsalesPrice(Product.getsalesPrice());
-	    productToUpdate.setDescription(Product.getDescription());
-	    productToUpdate.setShop(Product.getShop());
+	    productToUpdate.setName(product.getName());
+	    productToUpdate.setPrice(product.getPrice());
+	    productToUpdate.setSalesPrice(product.getSalesPrice());
+	    productToUpdate.setDescription(product.getDescription());
+	    productToUpdate.setShop(product.getShop());
 	 
 	    return repository.save(productToUpdate);
 	}   
